@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 import { loginUser } from "@/services/auth";
 import { saveAuthToken } from "@/utils/index";
 import { useUser } from "@/context/user-info-context";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
+const fpPromise = FingerprintJS.load();
+
+fpPromise.then((fp) => fp.get()).then((result) => console.log(result?.visitorId));
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -53,6 +57,15 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <button
+        className="w-40 h-20 text-amber-800 cursor-pointer hover:bg-amber-700"
+        onClick={async () => {
+          const t = await (await FingerprintJS.load())?.get();
+          console.log("🚀 ~ LoginPage ~ res:", t?.visitorId);
+        }}
+      >
+        test
+      </button>
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
